@@ -1,11 +1,11 @@
 # Proyecto E-Commerce
 
-> .[!NOTE].
+> [!NOTE]
 > 1er PRE-Entrega del proyecto
 
-> .[!TIP].
+> [!TIP]
 > Ver la tienda desde la sección GALERÍA DE PRODUCTOS
 > Modificar el contenido duplicado de la sección de INICIO y GALERÍA DE PRODUCTOS
 
-> .[!IMPORTANT].
+> [!IMPORTANT]
 > Implementar loggin y validación de usuarios
