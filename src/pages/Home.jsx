@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Header from '../components/estaticos/Header'
 import Footer from '../components/estaticos/Footer'
 import ProductList from '../components/ProductList'
 import Cart from '../components/Cart'
 import loading from '../assets/loading.gif'
 import '../components/styleProductos.css'
+import { CartContext } from '../context/CartContext'
 
-const Home = ({ cart, productos, cargando, agregarCarrito, borrarProducto }) => {
+const Home = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const { cargando, error } = useContext(CartContext);
 
   useEffect(() => {
     if (isCartOpen) {
@@ -18,33 +20,33 @@ const Home = ({ cart, productos, cargando, agregarCarrito, borrarProducto }) => 
   }, [isCartOpen]);
 
   return (
-    <>
-      <Header borrarProducto={borrarProducto} cartItems={cart} onCartOpen={() => setIsCartOpen(true)} />
+    <div className="home-container">
+      <Header onCartOpen={() => setIsCartOpen(true)} />
       <main>
         <h1>Bienvenidos a mi Tienda</h1>
+        
+        {error ? (
+          <div className="error-container">
+            <p>Lo sentimos, ha ocurrido un error al cargar los productos.</p>
+          </div>
+        ) : cargando ? (
+          <div className="loading-container">
+            <img src={loading} alt='Cargando...' />
+          </div>
+        ) : (
+          <ProductList />
+        )}
 
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit voluptate illum molestias, voluptates dolorem rerum. Alias tempore ut nisi eum, harum natus velit veritatis ea iste illum facere, ipsam modi!</p>
-        {
-          cargando ? (
-            <div className="loading-container">
-              <img src={loading} alt='loading' />
-            </div>
-          ) : (
-            <ProductList agregarCarrito={agregarCarrito} productos={productos}/>
-          )
-        }
-
-
+        {isCartOpen && (
+          <Cart 
+            isOpen={isCartOpen}
+            onClose={() => setIsCartOpen(false)}
+          />
+        )}
       </main>
-      <Cart
-        cartItems={cart}
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-        borrarProducto={borrarProducto}
-      />
       <Footer />
-    </>
-  )
+    </div>
+  );
 }
 
-export default Home
+export default Home;

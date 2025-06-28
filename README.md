@@ -1,12 +1,13 @@
 # Proyecto E-Commerce
 
 > [!NOTE]
-> 1er PRE-Entrega del proyecto
+> Entrega FINAL del proyecto. 📝
 
 > [!TIP]
-> Ver la tienda desde la sección GALERÍA DE PRODUCTOS.
->
-> Modificar el contenido duplicado de la sección de INICIO y GALERÍA DE PRODUCTOS
+> Mejorar estilos de la tieneda. 📈
+> Agregar filtros para una mejor navegacion. 🧭
+> Solucionar "VER MAS" de las cards. 💳
 
 > [!IMPORTANT]
-> Implementar loggin y validación de usuarios
+> No pude solucionar el main para que el footer quede sticky en la parte inferior de la pantalla cuando los productos no completan el 100vh.
+

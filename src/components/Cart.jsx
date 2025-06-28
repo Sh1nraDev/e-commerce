@@ -1,58 +1,98 @@
 import React, { useContext } from 'react'
 import './styleCart.css'
 import { CartContext } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
+import Swal from 'sweetalert2';
 
-const Cart = ({ cartItems, isOpen, onClose, borrarProducto }) => {
-    const { handlePurchase } = useContext(CartContext);
-    const total = cartItems.reduce((acc, item) => acc + item.precio * item.quantity, 0);
+const Cart = ({ isOpen, onClose }) => {
+    const { cart, handleDeleteFromCart, handlePurchase } = useContext(CartContext);
+    const { isAuthenticated } = useAuth();
+    
+    const total = cart.reduce((acc, item) => acc + item.precio * item.quantity, 0);
 
     const handlePurchaseClick = () => {
-        if (window.confirm('¿Confirmas realizar la compra?')) {
-            handlePurchase();
-            onClose(); // Cerrar el carrito después de la compra
+        if (!isAuthenticated) {
+            Swal.fire({
+                title: 'Atención',
+                text: 'Por favor, inicia sesión para realizar la compra',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+            return;
         }
+        Swal.fire({
+            title: '¿Confirmas realizar la compra?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, comprar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handlePurchase();
+                onClose();
+            }
+        });
     };
 
     return (
         <div className={`cart-drawer ${isOpen ? 'open' : ''}`}>
             <div className='cart-header'>
-                <h2 style={{ color: 'black' }}>Carrito de Compras</h2>
+                <h2>Carrito de Compras</h2>
                 <button onClick={onClose} className='close-button'>X</button>
             </div>
             <div className='cart-content'>
-                {cartItems.length === 0 ? (
-                    <p style={{ color: 'red' }}>El carrito esta vacío</p>
+                {cart.length === 0 ? (
+                    <p className="cart-empty">El carrito está vacío</p>
                 ) : (
                     <>
-                        <ul className='cart-item'>
-                            {cartItems.map((item) => (
+                        <ul className='cart-items'>
+                            {cart.map((item) => (
                                 <li key={item.id} className="cart-product-row">
-                                    <span className="cart-qty">{item.quantity}x</span>
-                                    <img src={item.imagen} alt={item.nombre} />
-                                    <span className="cart-name">{item.nombre}</span>
-                                    <span className="cart-price">${item.precio}</span>
-                                    <span className="cart-subtotal">${(item.precio * item.quantity).toFixed(2)}</span>
-                                    <button onClick={() => borrarProducto(item)} className="cart-delete-btn">
-                                        <i className="fa-solid fa-trash"></i>
-                                    </button>
+                                    <div className="cart-product-content">
+                                        <div className="cart-product-image">
+                                            <img src={item.imagen} alt={item.nombre} />
+                                        </div>
+                                        <div className="cart-product-info">
+                                            <h3>{item.nombre}</h3>
+                                            <p className="product-price">${item.precio}</p>
+                                            {item.quantity > 1 && (
+                                                <p className="product-total">
+                                                    Total: ${(item.precio * item.quantity).toFixed(2)}
+                                                </p>
+                                            )}
+                                        </div>
+                                        <div className="cart-product-quantity">
+                                            {item.quantity > 1 && (
+                                                <span className="quantity-badge">{item.quantity}x</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="cart-product-actions">                                        <button 
+                                            onClick={() => handleDeleteFromCart(item)}
+                                            className="remove-button"
+                                            title="Eliminar producto"
+                                        >
+                                            <i className="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
                                 </li>
                             ))}
                         </ul>
-                        <div className="cart-total-row">
-                            <span>Subtotal</span>
-                            <span className="cart-total">${total.toFixed(2)}</span>
+                        <div className="cart-summary">
+                            <p className="cart-total">Total: ${total.toFixed(2)}</p>
+                            <button 
+                                onClick={handlePurchaseClick}
+                                className="purchase-button"
+                                disabled={cart.length === 0}
+                            >
+                                Realizar Compra
+                            </button>
                         </div>
-                        <button 
-                            className="cart-purchase-btn"
-                            onClick={handlePurchaseClick}
-                        >
-                            COMPRAR
-                        </button>
                     </>
                 )}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Cart
+export default Cart;
