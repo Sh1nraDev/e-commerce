@@ -5,9 +5,13 @@
 
 > [!TIP]
 > Mejorar estilos de la tieneda. 📈
+>
 > Agregar filtros para una mejor navegacion. 🧭
+>
 > Solucionar "VER MAS" de las cards. 💳
 
 > [!IMPORTANT]
-> No pude solucionar el main para que el footer quede sticky en la parte inferior de la pantalla cuando los productos no completan el 100vh.
+> No pude solucionar el main para que el footer quede sticky en la parte inferior de la pantalla cuando los productos no completan el 100vh.❓
+>
+> Revisar bien el funcionamiento del carrito, en algunas situaciones no se visualiza correctamente.🤔
 
